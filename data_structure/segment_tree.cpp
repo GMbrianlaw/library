@@ -3,13 +3,8 @@ namespace SegmentTree {
     template <typename P>
     auto forLevels(int node, int size, bool direction, P p) {
 
-        if (p(node)) {
-            return !direction ? size << 1 : size - 1;
-        }
-
         while (node < size) {
-            node = node << 1 | direction;
-            node += !direction ? p(node) : -p(node);
+            node = node << 1 | direction + (!direction ? p(node) : -p(node));
         }
 
         return node;
