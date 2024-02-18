@@ -16,6 +16,7 @@
 #include <sstream>
 #include <stack>
 #include <string>
+#include <type_traits>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
@@ -143,7 +144,6 @@ namespace Debug {
     template <typename It>
     auto formatIt(It, It);
 
-    constexpr auto QUOTE = '\'';
     constexpr auto SEPERATOR = ", ";
 
     template <typename T>
@@ -268,7 +268,7 @@ namespace Debug {
 
     auto format(char value) {
 
-        return std::string({QUOTE, value, QUOTE});
+        return std::string({value});
 
     }
 
@@ -280,7 +280,7 @@ namespace Debug {
 
     auto format(const std::string& value) {
 
-        return '"' + value + '"';
+        return value;
 
     }
 
