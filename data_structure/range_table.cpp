@@ -7,20 +7,20 @@ namespace RangeTable {
     }
 
     template <typename F>
-    auto forAll(int size, F f) {
+    auto forAll(int sz, F f) {
 
-        for (auto i = 0; i < size; ++i) {
+        for (auto i = 0; i < sz; ++i) {
             f(0, i, true);
         }
 
-        for (auto i = 1; i <= log2(size); ++i) {
-            for (auto j = 0; j < size >> i; ++j) {
-                const auto sz = 1 << (i - 1);
-                for (auto k = 1; k <= sz; ++k) {
-                    f(i, sz * (j << 1 | 1) - k, k == 1);
+        for (auto i = 1; i <= log2(sz); ++i) {
+            const auto lvl_sz = 1 << (i - 1);
+            for (auto j = 0; j < sz >> i; ++j) {
+                for (auto k = 1; k <= lvl_sz; ++k) {
+                    f(i, lvl_sz * (j << 1 | 1) - k, k == 1);
                 }
-                for (auto k = 0; k < sz; ++k) {
-                    f(i, sz * (j << 1 | 1) + k, k == 0);
+                for (auto k = 0; k < lvl_sz; ++k) {
+                    f(i, lvl_sz * (j << 1 | 1) + k, k == 0);
                 }
             }
         }
@@ -28,19 +28,19 @@ namespace RangeTable {
     }
 
     template <typename F>
-    auto forRange(int index_1, int index_2, F f) {
+    auto forRange(int idx_1, int idx_2, F f) {
 
-        --index_2;
+        --idx_2;
 
-        if (index_1 == index_2) {
-            f(0, index_1);
+        if (idx_1 == idx_2) {
+            f(0, idx_1);
             return;
         }
 
-        const auto level = log2(index_1 ^ index_2) + 1;
+        const auto level = log2(idx_1 ^ idx_2) + 1;
 
-        f(level, index_1);
-        f(level, index_2);
+        f(level, idx_1);
+        f(level, idx_2);
 
     }
 

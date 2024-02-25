@@ -4,54 +4,54 @@
 #include <utility>
 
 template <typename T>
-auto boundDiophantine(T x, T y, T shift_x, T shift_y, T min_x, T max_x, T min_y, T max_y) {
+auto boundDiophantine(T x, T y, T shift_x, T shift_y, T mn_x, T mx_x, T mn_y, T mx_y) {
 
     const auto shift = [&](T amount) {
         x += shift_x * amount;
         y -= shift_y * amount;
     };
 
-    shift((min_x - x) / shift_x);
+    shift((mn_x - x) / shift_x);
 
     const auto sign_a = shift_x > 0 ? 1 : -1;
 
-    if (x < min_x) {
+    if (x < mn_x) {
         shift(sign_a);
     }
 
     const auto empty_range = std::array<T, 3>();
 
-    if (x > max_x) {
+    if (x > mx_x) {
         return empty_range;
     }
 
     const auto x_1 = x;
 
-    shift((max_x - x) / shift_x);
+    shift((mx_x - x) / shift_x);
 
-    if (x > max_x) {
+    if (x > mx_x) {
         shift(-sign_a);
     }
 
     const auto x_2 = x;
 
-    shift((y - min_y) / shift_y);
+    shift((y - mn_y) / shift_y);
 
     const auto sign_b = shift_y > 0 ? 1 : -1;
 
-    if (y < min_y) {
+    if (y < mn_y) {
         shift(-sign_b);
     }
 
-    if (y > max_y) {
+    if (y > mx_y) {
         return empty_range;
     }
 
     auto x_3 = x;
 
-    shift((y - max_y) / shift_y);
+    shift((y - mx_y) / shift_y);
 
-    if (y > max_y) {
+    if (y > mx_y) {
         shift(sign_b);
     }
 
@@ -59,14 +59,14 @@ auto boundDiophantine(T x, T y, T shift_x, T shift_y, T min_x, T max_x, T min_y,
         std::swap(x_3, x);
     }
 
-    const auto x_high = std::min(x_2, x);
-    const auto x_low = std::max(x_1, x_3);
+    const auto x_hi = std::min(x_2, x);
+    const auto x_lo = std::max(x_1, x_3);
 
-    if (x_low > x_high) {
+    if (x_lo > x_hi) {
         return empty_range;
     }
 
-    return std::array<T, 3>({x_low, x_high, (x_high - x_low) / std::abs(shift_x) + 1});
+    return std::array<T, 3>({x_lo, x_hi, (x_hi - x_lo) / std::abs(shift_x) + 1});
 
 }
 

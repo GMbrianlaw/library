@@ -12,14 +12,14 @@ public:
             std::chrono::steady_clock::now().time_since_epoch().count()
         );
 
-        auto result = static_cast<unsigned long long>(key);
+        auto res = static_cast<unsigned long long>(key);
 
-        result += constant + 0x9e3779b97f4a7c15ll;
-        result = (result ^ (result >> 30)) * 0xbf58476d1ce4e5b9ll;
-        result = (result ^ (result >> 27)) * 0x94d049bb133111ebll;
-        result ^= result >> 31;
+        res += constant + 0x9e3779b97f4a7c15ll;
+        res = (res ^ (res >> 30)) * 0xbf58476d1ce4e5b9ll;
+        res = (res ^ (res >> 27)) * 0x94d049bb133111ebll;
+        res ^= res >> 31;
 
-        return static_cast<std::size_t>(result);
+        return static_cast<std::size_t>(res);
 
     }
 

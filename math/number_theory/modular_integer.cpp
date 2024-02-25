@@ -29,65 +29,65 @@ private:
 
 public:
 
-    int value = 0;
+    int val = 0;
 
     explicit ModularInteger() = default;
 
-    explicit ModularInteger(long long value) : value(value % MODULUS) {
+    explicit ModularInteger(long long val) : val(val % MODULUS) {
 
-        if (this->value < 0) {
-            this->value += MODULUS;
+        if (this->val < 0) {
+            this->val += MODULUS;
         }
 
     }
 
     auto operator-() const {
 
-        return ModularInteger(-value);
+        return ModularInteger(-val);
 
     }
 
     auto operator++() {
 
-        value = value < MODULUS - 1 ? value + 1 : 0;
+        val = val < MODULUS - 1 ? val + 1 : 0;
 
     }
 
     auto operator--() {
 
-        value = value ? value - 1 : MODULUS - 1;
+        val = val ? val - 1 : MODULUS - 1;
 
     }
 
     auto operator+=(ModularInteger other) {
 
-        if (other.value >= MODULUS - value) {
-            value -= MODULUS;
+        if (other.val >= MODULUS - val) {
+            val -= MODULUS;
         }
 
-        value += other.value;
+        val += other.val;
 
     }
 
     auto operator-=(ModularInteger other) {
 
-        value -= other.value;
+        val -= other.val;
 
-        if (value < 0) {
-            value += MODULUS;
+        if (val < 0) {
+            val += MODULUS;
         }
 
     }
 
     auto operator*=(ModularInteger other) {
 
-        value = static_cast<long long>(value) * other.value % MODULUS;
+        val = static_cast<long long>(val) * other.val % MODULUS;
 
     }
 
     auto operator/=(ModularInteger other) {
 
-        *this *= ModularInteger(extendedGCD(other.value, MODULUS)[1]);
+        *this *= ModularInteger(extendedGCD(other.val, MODULUS)[1]);
 
     }
 

@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <vector>
 
 template <typename T>
@@ -10,7 +9,7 @@ private:
 
 public:
 
-    static auto getIdentity(int size) {
+    static auto getId(int size) {
 
         auto matrix = Matrix(size, size);
 

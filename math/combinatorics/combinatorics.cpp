@@ -5,40 +5,40 @@ class Combinatorics {
 
 private:
 
-    std::vector<T> factorials = std::vector<T>();
-    std::vector<T> inv_factorials = std::vector<T>();
-    int reached = 0;
+    std::vector<T> facts = std::vector<T>();
+    std::vector<T> inv_facts = std::vector<T>();
+    int ptr = 0;
 
 public:
 
     auto reserve(int size) {
 
-        if (reached == 0) {
-            factorials.emplace_back(1);
-            inv_factorials.emplace_back(1);
-            reached = 1;
+        if (ptr == 0) {
+            facts.emplace_back(1);
+            inv_facts.emplace_back(1);
+            ptr = 1;
         }
 
-        if (size < reached) {
+        if (size < ptr) {
             return;
         }
 
         const auto sz = 1 << (31 - __builtin_clz(size * 2 - 1));
 
-        factorials.resize(sz + 1);
-        inv_factorials.resize(sz + 1);
+        facts.resize(sz + 1);
+        inv_facts.resize(sz + 1);
 
-        for (auto i = reached; i <= sz; ++i) {
-            factorials[i] = factorials[i - 1] * T(i);
+        for (auto i = ptr; i <= sz; ++i) {
+            facts[i] = facts[i - 1] * T(i);
         }
 
-        inv_factorials[sz] = T(1) / factorials[sz];
+        inv_facts[sz] = T(1) / facts[sz];
 
-        for (auto i = sz - 1; i >= reached; --i) {
-            inv_factorials[i] = inv_factorials[i + 1] * T(i + 1);
+        for (auto i = sz - 1; i >= ptr; --i) {
+            inv_facts[i] = inv_facts[i + 1] * T(i + 1);
         }
 
-        reached = sz + 1;
+        ptr = sz + 1;
 
     }
 
@@ -46,7 +46,7 @@ public:
 
         reserve(n);
 
-        return factorials[n] * inv_factorials[k] * inv_factorials[n - k];
+        return facts[n] * inv_facts[k] * inv_facts[n - k];
 
     }
 
@@ -54,7 +54,7 @@ public:
 
         reserve(n);
 
-        return factorials[n];
+        return facts[n];
 
     }
 
@@ -62,7 +62,7 @@ public:
 
         reserve(n);
 
-        return inv_factorials[n] * factorials[n - 1];
+        return inv_facts[n] * facts[n - 1];
 
     }
 
@@ -70,7 +70,7 @@ public:
 
         reserve(n);
 
-        return inv_factorials[n];
+        return inv_facts[n];
 
     }
 
@@ -78,7 +78,7 @@ public:
 
         reserve(n);
 
-        return factorials[n] * inv_factorials[n - k];
+        return facts[n] * inv_facts[n - k];
 
     }
 

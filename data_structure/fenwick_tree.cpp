@@ -1,27 +1,27 @@
 namespace FenwickTree {
 
     template <typename P>
-    auto forLevels(int size, P p) {
+    auto forLevels(int sz, P p) {
 
-        auto index = 0;
+        auto idx = 0;
 
-        for (auto i = 31 - __builtin_clz(size); i >= 0; --i) {
-            const auto new_index = index | 1 << i;
-            if (new_index <= size && p(new_index)) {
-                index = new_index;
+        for (auto i = 31 - __builtin_clz(sz); i >= 0; --i) {
+            const auto new_idx = idx | 1 << i;
+            if (new_idx <= sz && p(new_idx)) {
+                idx = new_idx;
             }
         }
 
-        return index;
+        return idx;
 
     }
 
     template <typename F>
-    auto forParents(int node, int size, F f) {
+    auto forParents(int node, int sz, F f) {
 
         ++node;
 
-        while (node <= size) {
+        while (node <= sz) {
             f(node);
             node += node & -node;
         }

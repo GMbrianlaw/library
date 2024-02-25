@@ -7,17 +7,17 @@ class DisjointSetUnion {
 private:
 
     std::vector<int> reps = std::vector<int>();
-    std::vector<int> sizes = std::vector<int>();
+    std::vector<int> szs = std::vector<int>();
 
 public:
 
-    explicit DisjointSetUnion(int size) {
+    explicit DisjointSetUnion(int sz) {
 
-        reps.resize(size);
+        reps.resize(sz);
 
         std::iota(reps.begin(), reps.end(), 0);
 
-        sizes.assign(size, 1);
+        szs.assign(sz, 1);
 
     }
 
@@ -29,23 +29,23 @@ public:
             ptr = reps[ptr];
         }
 
-        const auto parent = ptr;
+        const auto rep = ptr;
 
         ptr = node;
 
-        while (ptr != parent) {
+        while (ptr != rep) {
             const auto next = reps[ptr];
-            reps[ptr] = parent;
+            reps[ptr] = rep;
             ptr = next;
         }
 
-        return parent;
+        return rep;
 
     }
 
     auto getSize(int node) {
 
-        return sizes[find(node)];
+        return szs[find(node)];
 
     }
 
@@ -55,11 +55,11 @@ public:
         node_2 = find(node_2);
 
         if (node_1 != node_2) {
-            if (sizes[node_1] < sizes[node_2]) {
+            if (szs[node_1] < szs[node_2]) {
                 std::swap(node_1, node_2);
             }
             reps[node_2] = node_1;
-            sizes[node_1] += sizes[node_2];
+            szs[node_1] += szs[node_2];
         }
 
     }

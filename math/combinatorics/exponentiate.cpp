@@ -1,16 +1,16 @@
 template <typename T, typename U>
-auto exponentiate(T base, U power, const T& identity = T(1)) {
+auto exponentiate(T base, U power, const T& id = T(1)) {
 
-    auto result = identity;
+    auto res = id;
 
     while (power > 0) {
         if (power & 1) {
-            result *= base;
+            res *= base;
         }
         base *= base;
         power >>= 1;
     }
 
-    return result;
+    return res;
 
 }

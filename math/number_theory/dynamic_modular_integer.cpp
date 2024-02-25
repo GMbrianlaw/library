@@ -35,65 +35,65 @@ public:
 
     }
 
-    int value = 0;
+    int val = 0;
 
     explicit DynamicModularInteger() = default;
 
-    explicit DynamicModularInteger(long long value) : value(value % modulus) {
+    explicit DynamicModularInteger(long long val) : val(val % modulus) {
 
-        if (this->value < 0) {
-            this->value += modulus;
+        if (this->val < 0) {
+            this->val += modulus;
         }
 
     }
 
     auto operator-() const {
 
-        return DynamicModularInteger(-value);
+        return DynamicModularInteger(-val);
 
     }
 
     auto operator++() {
 
-        value = value < modulus - 1 ? value + 1 : 0;
+        val = val < modulus - 1 ? val + 1 : 0;
 
     }
 
     auto operator--() {
 
-        value = value ? value - 1 : modulus - 1;
+        val = val ? val - 1 : modulus - 1;
 
     }
 
     auto operator+=(DynamicModularInteger other) {
 
-        if (other.value >= modulus - value) {
-            value -= modulus;
+        if (other.val >= modulus - val) {
+            val -= modulus;
         }
 
-        value += other.value;
+        val += other.val;
 
     }
 
     auto operator-=(DynamicModularInteger other) {
 
-        value -= other.value;
+        val -= other.val;
 
-        if (value < 0) {
-            value += modulus;
+        if (val < 0) {
+            val += modulus;
         }
 
     }
 
     auto operator*=(DynamicModularInteger other) {
 
-        value = static_cast<long long>(value) * other.value % modulus;
+        val = static_cast<long long>(val) * other.val % modulus;
 
     }
 
     auto operator/=(DynamicModularInteger other) {
 
-        *this *= DynamicModularInteger(extendedGCD(other.value, modulus)[1]);
+        *this *= DynamicModularInteger(extendedGCD(other.val, modulus)[1]);
 
     }
 
