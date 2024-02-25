@@ -16,7 +16,7 @@ auto nextInt(T a, T b) {
 
 auto nextBool() {
 
-    return static_cast<bool>(nextInt(0, 2));
+    return nextInt(0, 2) == 1;
 
 }
 
