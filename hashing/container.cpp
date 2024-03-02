@@ -32,12 +32,12 @@ public:
     template <typename It>
     explicit ContainerHasher(It it_l, It it_r) {
 
+        const auto len = it_r - it_l;
+
         while (it_l != it_r) {
             pfxs.push_back(pfxs.back() * base + T(*it_l));
             ++it_l;
         }
-
-        const auto len = it_r - it_l;
 
         pows.reserve(len + 1);
 
