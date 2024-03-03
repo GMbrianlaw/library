@@ -9,7 +9,7 @@ namespace FunctionContainer {
             it != cont.begin() && std::prev(it) != cont.begin() &&
             f(*std::prev(it), *it) <= f(*std::prev(it, 2), *std::prev(it))
         ) {
-            it = cont.erase(prev(it));
+            it = cont.erase(std::prev(it));
         }
 
         while (

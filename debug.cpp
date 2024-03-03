@@ -144,8 +144,6 @@ namespace Debug {
     template <typename It>
     auto formatIt(It, It);
 
-    constexpr auto SEPERATOR = ", ";
-
     template <typename T>
     auto combine(const T& value) {
 
@@ -186,7 +184,7 @@ namespace Debug {
         for (auto it = value.begin(); it != value.end(); ++it) {
             str.append(format(it->first) + ": " + format(it->second));
             if (std::next(it) != value.end()) {
-                str.append(SEPERATOR);
+                str.append(", ");
             }
         }
 
@@ -220,7 +218,7 @@ namespace Debug {
     template <typename T1, typename T2>
     auto format(const std::pair<T1, T2>& value) {
 
-        return '(' + format(value.first) + SEPERATOR + format(value.second) + ')';
+        return '(' + format(value.first) + ", " + format(value.second) + ')';
 
     }
 
@@ -300,7 +298,7 @@ namespace Debug {
             str.append(format(f(value)));
             value.pop();
             if (!value.empty()) {
-                str.append(SEPERATOR);
+                str.append(", ");
             }
         }
 
@@ -318,7 +316,7 @@ namespace Debug {
         while (first != last) {
             str.append(format(*first));
             if (std::next(first) != last) {
-                str.append(SEPERATOR);
+                str.append(", ");
             }
             ++first;
         }
