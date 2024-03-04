@@ -15,7 +15,7 @@ public:
 
         reps.resize(sz);
 
-        std::iota(reps.begin(), reps.end(), 0);
+        std::iota(std::begin(reps), std::end(reps), 0);
 
         szs.assign(sz, 1);
 

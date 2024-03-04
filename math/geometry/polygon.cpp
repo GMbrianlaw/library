@@ -259,13 +259,13 @@ public:
 
     auto begin() {
 
-        return vertices.begin();
+        return std::begin(vertices);
 
     }
 
     auto begin() const {
 
-        return vertices.begin();
+        return std::begin(vertices);
 
     }
 
@@ -305,13 +305,13 @@ public:
 
     auto end() {
 
-        return vertices.end();
+        return std::end(vertices);
 
     }
 
     auto end() const {
 
-        return vertices.end();
+        return std::end(vertices);
 
     }
 
@@ -324,6 +324,12 @@ public:
         }
 
         return perim;
+
+    }
+
+    auto size() const {
+
+        return std::size(vertices);
 
     }
 

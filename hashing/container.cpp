@@ -41,7 +41,7 @@ public:
 
         pows.reserve(len + 1);
 
-        while (static_cast<int>(pows.size()) <= len) {
+        while (static_cast<int>(std::size(pows)) <= len) {
             pows.push_back(pows.back() * base);
         }
 
@@ -58,7 +58,7 @@ public:
 
         pfxs.push_back(pfxs.back() * base + T(val));
 
-        if (pows.size() <= pfxs.size()) {
+        if (std::size(pows) <= std::size(pfxs)) {
             pows.push_back(pows.back() * base);
         }
 

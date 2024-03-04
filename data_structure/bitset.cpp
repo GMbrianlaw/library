@@ -133,13 +133,13 @@ public:
 
     auto reset() {
 
-        std::fill(data.begin(), data.end(), 0);
+        std::fill(std::begin(data), std::end(data), 0);
 
     }
 
     auto set() {
 
-        std::fill(data.begin(), data.end(), ~0llu);
+        std::fill(std::begin(data), std::end(data), ~0llu);
 
     }
 
@@ -176,7 +176,7 @@ public:
             }
         }
 
-        std::fill_n(data.begin(), shift, 0);
+        std::fill_n(std::begin(data), shift, 0);
 
     }
 
@@ -199,7 +199,7 @@ public:
             }
         }
 
-        std::fill(data.end() - shift, data.end(), 0);
+        std::fill(std::end(data) - shift, std::end(data), 0);
 
     }
 

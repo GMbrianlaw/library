@@ -100,25 +100,25 @@ public:
 
     auto begin() {
 
-        return data.begin();
+        return std::begin(data);
 
     }
 
     auto begin() const {
 
-        return data.begin();
+        return std::begin(data);
 
     }
 
     auto end() {
 
-        return data.end();
+        return std::end(data);
 
     }
 
     auto end() const {
 
-        return data.end();
+        return std::end(data);
 
     }
 

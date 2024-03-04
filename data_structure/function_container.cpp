@@ -6,14 +6,14 @@ namespace FunctionContainer {
     auto erase(typename T::iterator it, T& cont, F f) {
 
         while (
-            it != cont.begin() && std::prev(it) != cont.begin() &&
+            it != std::begin(cont) && std::prev(it) != std::begin(cont) &&
             f(*std::prev(it), *it) <= f(*std::prev(it, 2), *std::prev(it))
         ) {
             it = cont.erase(std::prev(it));
         }
 
         while (
-            it != std::prev(cont.end()) && it != std::prev(cont.end(), 2) &&
+            it != std::prev(std::end(cont)) && it != std::prev(std::end(cont), 2) &&
             f(*it, *std::next(it)) >= f(*std::next(it), *std::next(it, 2))
         ) {
             it = std::prev(cont.erase(std::next(it)));
