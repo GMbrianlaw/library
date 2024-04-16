@@ -33,13 +33,13 @@ private:
 
     using Edge = std::pair<int, T>;
 
-    std::vector<std::vector<int>> adj = std::vector<std::vector<int>>();
-    std::vector<Edge> edges = std::vector<Edge>();
     T mx_flow = 0;
     int sz = 0;
 
 public:
 
+    std::vector<std::vector<int>> adj = std::vector<std::vector<int>>();
+    std::vector<Edge> edges = std::vector<Edge>();
     std::vector<int> lvls = std::vector<int>();
 
     explicit Dinic(int sz) : sz(sz) {
