@@ -1,6 +1,6 @@
 #include <vector>
 
-namespace Factors {
+namespace Sieve {
 
     auto factors = std::vector<int>();
     auto primes = std::vector<int>();
