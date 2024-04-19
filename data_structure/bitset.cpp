@@ -3,13 +3,13 @@
 
 class BitSet {
 
-    using BlockType = unsigned long long;
-
 private:
 
+    using BlockT = unsigned long long;
+
     int blocks = 0;
-    std::vector<BlockType> data = std::vector<BlockType>();
-    BlockType mask = 0;
+    std::vector<BlockT> data = std::vector<BlockT>();
+    BlockT mask = 0;
     int sz = 0;
 
 public:
@@ -18,12 +18,12 @@ public:
 
     private:
 
-        BlockType& block;
-        BlockType mask = 0;
+        BlockT& block;
+        BlockT mask = 0;
 
     public:
 
-        explicit Reference(BlockType& block, int bit) : block(block), mask(1llu << bit) {}
+        explicit Reference(BlockT& block, int bit) : block(block), mask(1llu << bit) {}
 
         operator bool() const {
 
