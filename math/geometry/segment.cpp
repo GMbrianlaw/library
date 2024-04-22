@@ -138,6 +138,8 @@ public:
 template <typename T>
 class Segment {
 
+private:
+
     using PointT = Point<T>;
 
 public:

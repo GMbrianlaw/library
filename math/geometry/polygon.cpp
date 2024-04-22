@@ -139,6 +139,8 @@ public:
 template <typename T>
 class Segment {
 
+private:
+
     using PointT = Point<T>;
 
 public:
@@ -214,10 +216,10 @@ public:
 template <typename T>
 class Polygon {
 
+private:
+
     using PointT = Point<T>;
     using SegmentT = Segment<T>;
-
-private:
 
     std::vector<PointT> vertices = std::vector<PointT>();
 
