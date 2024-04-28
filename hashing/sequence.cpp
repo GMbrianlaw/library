@@ -2,7 +2,7 @@
 #include <vector>
 
 template <typename T>
-class ContainerHasher {
+class SequenceHasher {
 
 private:
 
@@ -27,10 +27,10 @@ public:
 
     }
 
-    explicit ContainerHasher() = default;
+    explicit SequenceHasher() = default;
 
     template <typename It>
-    explicit ContainerHasher(It it_l, It it_r) {
+    explicit SequenceHasher(It it_l, It it_r) {
 
         const auto len = it_r - it_l;
 
