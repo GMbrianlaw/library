@@ -29,6 +29,12 @@ private:
 
 public:
 
+    static auto getModulus() {
+
+        return modulus;
+
+    }
+
     static auto setModulus(int modulus_) {
 
         modulus = modulus_;

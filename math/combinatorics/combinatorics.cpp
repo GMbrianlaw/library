@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <vector>
 
 template <typename T>
@@ -23,7 +24,7 @@ public:
             return;
         }
 
-        const auto sz = 1 << (31 - __builtin_clz(size * 2 - 1));
+        const auto sz = std::min(1 << (31 - __builtin_clz(size * 2 - 1)), T::getModulus() - 1);
 
         facts.resize(sz + 1);
         inv_facts.resize(sz + 1);

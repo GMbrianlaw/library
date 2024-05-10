@@ -29,6 +29,12 @@ private:
 
 public:
 
+    static auto getModulus() {
+
+        return MODULUS;
+
+    }
+
     int val = 0;
 
     explicit ModularInteger() = default;
