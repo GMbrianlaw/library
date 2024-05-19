@@ -45,7 +45,7 @@ public:
 
     explicit BitSet(
         int size
-    ) : blocks((size + 63) >> 6), mask((size & 63 ? 1llu << size % 64 : 0) - 1), sz(size) {
+    ) : blocks((size + 63) / 64), mask((size % 64 ? 1llu << size % 64 : 0) - 1), sz(size) {
 
         data.resize(blocks);
 
@@ -53,13 +53,13 @@ public:
 
     auto operator[](int pos) {
 
-        return Reference(data[pos >> 6], pos & 63);
+        return Reference(data[pos / 64], pos % 64);
 
     }
 
     auto operator[](int pos) const {
 
-        return (data[pos >> 6] & 1llu << (pos & 63)) != 0;
+        return (data[pos / 64] & 1llu << pos % 64) != 0;
 
     }
 
@@ -166,8 +166,8 @@ public:
             return;
         }
 
-        const auto bits = pos & 63;
-        const auto shift = pos >> 6;
+        const auto bits = pos % 64;
+        const auto shift = pos / 64;
 
         for (auto i = blocks - 1; i >= shift; --i) {
             data[i] = data[i - shift] << bits;
@@ -189,8 +189,8 @@ public:
 
         data[blocks - 1] &= mask;
 
-        const auto bits = pos & 63;
-        const auto shift = pos >> 6;
+        const auto bits = pos % 64;
+        const auto shift = pos / 64;
 
         for (auto i = 0; i < blocks - shift; ++i) {
             data[i] = data[i + shift] >> bits;
