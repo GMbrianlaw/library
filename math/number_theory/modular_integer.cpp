@@ -5,14 +5,14 @@ template <typename T>
 auto extendedGCD(T m, T n) {
 
     auto a = T(1);
-    auto a_inner = T();
+    auto a_in = T();
     auto b = T();
-    auto b_inner = T(1);
+    auto b_in = T(1);
 
     while (n) {
         const auto q = m / n;
-        a_inner = std::exchange(a, a_inner) - q * a_inner;
-        b_inner = std::exchange(b, b_inner) - q * b_inner;
+        a_in = std::exchange(a, a_in) - q * a_in;
+        b_in = std::exchange(b, b_in) - q * b_in;
         n = std::exchange(m, n) - q * n;
     }
 
@@ -20,12 +20,12 @@ auto extendedGCD(T m, T n) {
 
 }
 
-template <int MODULUS_>
+template <int MOD>
 class ModularInteger {
 
 private:
 
-    static constexpr auto MODULUS = MODULUS_;
+    static constexpr auto MODULUS = MOD;
 
 public:
 

@@ -11,10 +11,10 @@ public:
 
     explicit YCombinator(F&& f) : f(f) {}
 
-    template <typename... Ts>
-    decltype(auto) operator()(Ts&&... arguments) const {
+    template <typename... Args>
+    decltype(auto) operator()(Args&&... args) const {
 
-        return f(*this, std::forward<Ts>(arguments)...);
+        return f(*this, std::forward<Args>(args)...);
 
     }
 

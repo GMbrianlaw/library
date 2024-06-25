@@ -47,17 +47,17 @@ public:
 
     }
 
-    auto operator*=(T factor) {
+    auto operator*=(T fact) {
 
-        x *= factor;
-        y *= factor;
+        x *= fact;
+        y *= fact;
 
     }
 
-    auto operator/=(T divisor) {
+    auto operator/=(T div) {
 
-        x /= divisor;
-        y /= divisor;
+        x /= div;
+        y /= div;
 
     }
 
@@ -147,7 +147,7 @@ public:
 
     static auto intersects(const Segment& s_1, const Segment& s_2) {
 
-        const auto crossSign = [](PointT v_1, PointT v_2) {
+        const auto sign = [](PointT v_1, PointT v_2) {
             const auto prod = PointT::cross(v_1, v_2);
             if (prod == 0) {
                 return 0;
@@ -155,11 +155,11 @@ public:
             return prod > 0 ? 1 : -1;
         };
 
-        const auto sign_1 = crossSign(s_1.b - s_1.a, s_2.a - s_1.a);
-        const auto sign_2 = crossSign(s_1.b - s_1.a, s_2.b - s_1.a);
+        const auto sign_1 = sign(s_1.b - s_1.a, s_2.a - s_1.a);
+        const auto sign_2 = sign(s_1.b - s_1.a, s_2.b - s_1.a);
 
         if (sign_1 == 0 && sign_2 == 0) {
-            const auto overlaps = [](T a_1, T a_2, T b_1, T b_2) {
+            const auto isects = [](T a_1, T a_2, T b_1, T b_2) {
                 if (a_1 > a_2) {
                     std::swap(a_1, a_2);
                 }
@@ -169,14 +169,14 @@ public:
                 return std::max(a_1, b_1) <= std::min(a_2, b_2);
             };
             return (
-                overlaps(s_1.a.x, s_1.b.x, s_2.a.x, s_2.b.x) &&
-                overlaps(s_1.a.y, s_1.b.y, s_2.a.y, s_2.b.y)
+                isects(s_1.a.x, s_1.b.x, s_2.a.x, s_2.b.x) &&
+                isects(s_1.a.y, s_1.b.y, s_2.a.y, s_2.b.y)
             );
         }
 
         const auto vec = s_2.b - s_2.a;
 
-        return sign_1 != sign_2 && crossSign(vec, s_1.a - s_2.a) != crossSign(vec, s_1.b - s_2.a);
+        return sign_1 != sign_2 && sign(vec, s_1.a - s_2.a) != sign(vec, s_1.b - s_2.a);
 
     }
 
@@ -189,12 +189,12 @@ public:
 
     auto contains(PointT p) const {
 
-        const auto [min_x, max_x] = std::minmax(a.x, b.x);
-        const auto [min_y, max_y] = std::minmax(a.y, b.y);
+        const auto [mn_x, mx_x] = std::minmax(a.x, b.x);
+        const auto [mn_y, mx_y] = std::minmax(a.y, b.y);
 
         return (
-            PointT::cross(b - a, p - a) == 0 && p.x >= min_x && p.x <= max_x && p.y >= min_y &&
-            p.y <= max_y
+            PointT::cross(b - a, p - a) == 0 && p.x >= mn_x && p.x <= mx_x && p.y >= mn_y &&
+            p.y <= mx_y
         );
 
     }
@@ -218,10 +218,10 @@ class Polygon {
 
 private:
 
-    using PointT = Point<T>;
-    using SegmentT = Segment<T>;
+    using PtT = Point<T>;
+    using SegT = Segment<T>;
 
-    std::vector<PointT> vertices = std::vector<PointT>();
+    std::vector<PtT> vtxs = std::vector<PtT>();
 
 public:
 
@@ -231,7 +231,7 @@ public:
 
     explicit Polygon(int sz) : sz(sz) {
 
-        vertices.resize(sz);
+        vtxs.resize(sz);
 
     }
 
@@ -239,64 +239,32 @@ public:
     explicit Polygon(It first, It last) {
 
         while (first != last) {
-            vertices.push_back(*first);
+            vtxs.push_back(*first);
             ++first;
         }
 
-        sz = vertices.size();
+        sz = std::size(vtxs);
 
     }
 
     auto& operator[](int pos) {
 
-        return vertices[pos];
+        return vtxs[pos];
 
     }
 
     auto operator[](int pos) const {
 
-        return vertices[pos];
+        return vtxs[pos];
 
     }
 
-    auto begin() {
-
-        return std::begin(vertices);
-
-    }
-
-    auto begin() const {
-
-        return std::begin(vertices);
-
-    }
-
-    auto contains(PointT p) const {
-
-        auto inside = 0;
-
-        for (auto i = 0; i < sz; ++i) {
-            const auto a = vertices[i];
-            const auto b = vertices[i < sz - 1 ? i + 1 : 0];
-            if (SegmentT(a, b).contains(p)) {
-                return 2;
-            }
-            inside ^= (
-                (a.x < p.x && p.x <= b.x && PointT::cross(a - b, p - b) > 0) ||
-                (b.x < p.x && p.x <= a.x && PointT::cross(b - a, p - a) > 0)
-            );
-        }
-
-        return inside;
-
-    }
-
-    auto doubleArea() const {
+    auto area() const {
 
         auto area = T();
 
         for (auto i = 0; i < sz; ++i) {
-            area += PointT::cross(vertices[i], vertices[i < sz - 1 ? i + 1 : 0]);
+            area += PtT::cross(vtxs[i], vtxs[i < sz - 1 ? i + 1 : 0]);
         }
 
         area = std::abs(area);
@@ -305,15 +273,47 @@ public:
 
     }
 
+    auto begin() {
+
+        return std::begin(vtxs);
+
+    }
+
+    auto begin() const {
+
+        return std::begin(vtxs);
+
+    }
+
+    auto contains(PtT p) const {
+
+        auto in = 0;
+
+        for (auto i = 0; i < sz; ++i) {
+            const auto a = vtxs[i];
+            const auto b = vtxs[i < sz - 1 ? i + 1 : 0];
+            if (SegT(a, b).contains(p)) {
+                return 2;
+            }
+            in ^= (
+                (a.x < p.x && p.x <= b.x && PtT::cross(a - b, p - b) > 0) ||
+                (b.x < p.x && p.x <= a.x && PtT::cross(b - a, p - a) > 0)
+            );
+        }
+
+        return in;
+
+    }
+
     auto end() {
 
-        return std::end(vertices);
+        return std::end(vtxs);
 
     }
 
     auto end() const {
 
-        return std::end(vertices);
+        return std::end(vtxs);
 
     }
 
@@ -322,7 +322,7 @@ public:
         auto perim = 0.0;
 
         for (auto i = 0; i < sz; ++i) {
-            perim += SegmentT(vertices[i], vertices[i < sz - 1 ? i + 1 : 0]).length();
+            perim += SegT(vtxs[i], vtxs[i < sz - 1 ? i + 1 : 0]).length();
         }
 
         return perim;
@@ -331,7 +331,7 @@ public:
 
     auto size() const {
 
-        return std::size(vertices);
+        return std::size(vtxs);
 
     }
 

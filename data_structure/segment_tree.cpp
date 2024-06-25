@@ -1,7 +1,7 @@
 namespace SegmentTree {
 
     template <typename P>
-    auto forLevels(int node, int sz, bool dir, P p) {
+    auto forLvls(int node, int sz, bool dir, P p) {
 
         while (node < sz) {
             node = node << 1 | dir + (!dir ? p(node) : -p(node));
@@ -12,7 +12,7 @@ namespace SegmentTree {
     }
 
     template <typename F>
-    auto forRange(int node_1, int node_2, F f) {
+    auto forRng(int node_1, int node_2, F f) {
 
         while (node_1 < node_2) {
             if (node_1 & 1) {
@@ -36,7 +36,7 @@ namespace SegmentTree {
     }
 
     template <typename F>
-    auto forParents(int node, bool dir, F f) {
+    auto forPars(int node, bool dir, F f) {
 
         const auto lvls = log2(node);
 
@@ -47,7 +47,7 @@ namespace SegmentTree {
     }
 
     template <typename F>
-    auto forRangeOrdered(int node_1, int node_2, bool dir, F f) {
+    auto forRngOrd(int node_1, int node_2, bool dir, F f) {
 
         auto base = !dir ? node_1 - 1 : node_2;
         const auto mask = (1 << log2((node_1 - 1) ^ node_2)) - 1;

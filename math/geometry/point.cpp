@@ -44,17 +44,17 @@ public:
 
     }
 
-    auto operator*=(T factor) {
+    auto operator*=(T fact) {
 
-        x *= factor;
-        y *= factor;
+        x *= fact;
+        y *= fact;
 
     }
 
-    auto operator/=(T divisor) {
+    auto operator/=(T div) {
 
-        x /= divisor;
-        y /= divisor;
+        x /= div;
+        y /= div;
 
     }
 

@@ -14,10 +14,10 @@ public:
 
     explicit YCombinator(F&& f) : f(f) {}
 
-    template <typename... Ts>
-    decltype(auto) operator()(Ts&&... arguments) const {
+    template <typename... Args>
+    decltype(auto) operator()(Args&&... args) const {
 
-        return f(*this, std::forward<Ts>(arguments)...);
+        return f(*this, std::forward<Args>(args)...);
 
     }
 
@@ -69,16 +69,16 @@ public:
         while (true) {
             std::fill_n(std::begin(lvls), sz, -1);
             lvls[src] = 0;
-            auto process = std::queue<int>();
-            process.push(src);
-            while (!std::empty(process)) {
-                const auto node = process.front();
-                process.pop();
+            auto proc = std::queue<int>();
+            proc.push(src);
+            while (!std::empty(proc)) {
+                const auto node = proc.front();
+                proc.pop();
                 for (auto x : adj[node]) {
-                    const auto& [neighbor, cap] = edges[x];
-                    if (lvls[neighbor] == -1 && cap) {
-                        lvls[neighbor] = lvls[node] + 1;
-                        process.push(neighbor);
+                    const auto& [nbr, cap] = edges[x];
+                    if (lvls[nbr] == -1 && cap) {
+                        lvls[nbr] = lvls[node] + 1;
+                        proc.push(nbr);
                     }
                 }
             }
@@ -94,12 +94,12 @@ public:
                     auto flow_o = T();
                     while (ptrs[node] < static_cast<int>(std::size(adj[node])) && flow_o < flow_i) {
                         const auto edge_idx = adj[node][ptrs[node]];
-                        auto& [neighbor, cap] = edges[edge_idx];
-                        if (lvls[neighbor] == lvls[node] + 1 && cap) {
-                            const auto cur_flow = self(neighbor, std::min(cap, flow_i - flow_o));
-                            flow_o += cur_flow;
-                            cap -= cur_flow;
-                            edges[edge_idx ^ 1].second += cur_flow;
+                        auto& [nbr, cap] = edges[edge_idx];
+                        if (lvls[nbr] == lvls[node] + 1 && cap) {
+                            const auto c_flow = self(nbr, std::min(cap, flow_i - flow_o));
+                            flow_o += c_flow;
+                            cap -= c_flow;
+                            edges[edge_idx ^ 1].second += c_flow;
                         }
                         ptrs[node] += flow_o < flow_i;
                     }

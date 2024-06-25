@@ -8,12 +8,12 @@ auto zFunction(It it_l, It it_r) {
     auto ptr_r = 0;
     const auto sz = it_r - it_l;
 
-    auto z_vals = std::vector<int>(sz);
+    auto vals = std::vector<int>(sz);
 
     for (auto i = 1; i < sz; ++i) {
-        auto& len = z_vals[i];
+        auto& len = vals[i];
         if (i < ptr_r) {
-            len = std::min(z_vals[i - ptr_l], ptr_r - i);
+            len = std::min(vals[i - ptr_l], ptr_r - i);
         }
         while (len < sz - i && it_l[i + len] == it_l[len]) {
             ++len;
@@ -24,6 +24,6 @@ auto zFunction(It it_l, It it_r) {
         }
     }
 
-    return z_vals;
+    return vals;
 
 }

@@ -43,7 +43,7 @@ public:
 
     }
 
-    auto getSize(int node) {
+    auto getSz(int node) {
 
         return szs[find(node)];
 

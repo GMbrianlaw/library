@@ -11,7 +11,7 @@ namespace Random {
 template <typename T>
 auto nextInt(T a, T b) {
 
-    return std::uniform_int_distribution<T>(a, b - 1)(Random::rng);
+    return std::uniform_int_distribution<T>(a, b - 1)(Random::rng_64);
 
 }
 

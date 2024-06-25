@@ -7,7 +7,7 @@ private:
 
     using BlockT = unsigned long long;
 
-    int blocks = 0;
+    int blks = 0;
     std::vector<BlockT> data = std::vector<BlockT>();
     BlockT mask = 0;
     int sz = 0;
@@ -18,25 +18,25 @@ public:
 
     private:
 
-        BlockT& block;
+        BlockT& blk;
         BlockT mask = 0;
 
     public:
 
-        explicit Reference(BlockT& block, int bit) : block(block), mask(1llu << bit) {}
+        explicit Reference(BlockT& block, int bit) : blk(block), mask(1llu << bit) {}
 
         operator bool() const {
 
-            return block & mask;
+            return blk & mask;
 
         }
 
         auto operator=(bool x) {
 
             if (!x) {
-                block &= ~mask;
+                blk &= ~mask;
             } else {
-                block |= mask;
+                blk |= mask;
             }
 
         }
@@ -44,10 +44,10 @@ public:
     };
 
     explicit BitSet(
-        int size
-    ) : blocks((size + 63) / 64), mask((size % 64 ? 1llu << size % 64 : 0) - 1), sz(size) {
+        int sz
+    ) : blks((sz + 63) / 64), mask((sz % 64 ? 1llu << sz % 64 : 0) - 1), sz(sz) {
 
-        data.resize(blocks);
+        data.resize(blks);
 
     }
 
@@ -65,7 +65,7 @@ public:
 
     auto operator&=(const BitSet& other) {
 
-        for (auto i = 0; i < blocks; ++i) {
+        for (auto i = 0; i < blks; ++i) {
             data[i] &= other.data[i];
         }
 
@@ -73,7 +73,7 @@ public:
 
     auto operator^=(const BitSet& other) {
 
-        for (auto i = 0; i < blocks; ++i) {
+        for (auto i = 0; i < blks; ++i) {
             data[i] ^= other.data[i];
         }
 
@@ -81,7 +81,7 @@ public:
 
     auto operator|=(const BitSet& other) {
 
-        for (auto i = 0; i < blocks; ++i) {
+        for (auto i = 0; i < blks; ++i) {
             data[i] |= other.data[i];
         }
 
@@ -89,33 +89,33 @@ public:
 
     auto all() const {
 
-        for (auto i = 0; i < blocks - 1; ++i) {
+        for (auto i = 0; i < blks - 1; ++i) {
             if (~data[i]) {
                 return false;
             }
         }
 
-        return (data[blocks - 1] & mask) == mask;
+        return (data[blks - 1] & mask) == mask;
 
     }
 
     auto any() const {
 
-        for (auto i = 0; i < blocks - 1; ++i) {
+        for (auto i = 0; i < blks - 1; ++i) {
             if (data[i]) {
                 return true;
             }
         }
 
-        return (data[blocks - 1] & mask) != 0;
+        return (data[blks - 1] & mask) != 0;
 
     }
 
     auto count() const {
 
-        auto bits = __builtin_popcountll(data[blocks - 1] & mask);
+        auto bits = __builtin_popcountll(data[blks - 1] & mask);
 
-        for (auto i = 0; i < blocks - 1; ++i) {
+        for (auto i = 0; i < blks - 1; ++i) {
             bits += __builtin_popcountll(data[i]);
         }
 
@@ -151,11 +151,11 @@ public:
 
     auto operator~() const {
 
-        auto result = *this;
+        auto res = *this;
 
-        result.flip();
+        res.flip();
 
-        return result;
+        return res;
 
     }
 
@@ -167,16 +167,16 @@ public:
         }
 
         const auto bits = pos % 64;
-        const auto shift = pos / 64;
+        const auto shft = pos / 64;
 
-        for (auto i = blocks - 1; i >= shift; --i) {
-            data[i] = data[i - shift] << bits;
-            if (bits && i > shift) {
-                data[i] |= data[i - shift - 1] >> (64 - bits);
+        for (auto i = blks - 1; i >= shft; --i) {
+            data[i] = data[i - shft] << bits;
+            if (bits && i > shft) {
+                data[i] |= data[i - shft - 1] >> (64 - bits);
             }
         }
 
-        std::fill_n(std::begin(data), shift, 0);
+        std::fill_n(std::begin(data), shft, 0);
 
     }
 
@@ -187,19 +187,19 @@ public:
             return;
         }
 
-        data[blocks - 1] &= mask;
+        data[blks - 1] &= mask;
 
         const auto bits = pos % 64;
-        const auto shift = pos / 64;
+        const auto shft = pos / 64;
 
-        for (auto i = 0; i < blocks - shift; ++i) {
-            data[i] = data[i + shift] >> bits;
-            if (bits && i < blocks - shift - 1) {
-                data[i] |= data[i + shift + 1] << (64 - bits);
+        for (auto i = 0; i < blks - shft; ++i) {
+            data[i] = data[i + shft] >> bits;
+            if (bits && i < blks - shft - 1) {
+                data[i] |= data[i + shft + 1] << (64 - bits);
             }
         }
 
-        std::fill(std::end(data) - shift, std::end(data), 0);
+        std::fill(std::end(data) - shft, std::end(data), 0);
 
     }
 
@@ -211,17 +211,21 @@ public:
 
     friend auto operator==(const BitSet& lhs, const BitSet& rhs) {
 
+        if (lhs.sz != rhs.sz) {
+            return false;
+        }
+
         const auto& data_1 = lhs.data;
         const auto& data_2 = rhs.data;
-        const auto length = lhs.blocks;
+        const auto len = lhs.blks;
 
-        for (auto i = 0; i < length - 1; ++i) {
+        for (auto i = 0; i < len - 1; ++i) {
             if (data_1[i] != data_2[i]) {
                 return false;
             }
         }
 
-        return ((data_1[length - 1] ^ data_2[length - 1]) & lhs.mask) == 0;
+        return ((data_1[len - 1] ^ data_2[len - 1]) & lhs.mask) == 0;
 
     }
 

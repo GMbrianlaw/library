@@ -5,14 +5,14 @@ template <typename T>
 auto extendedGCD(T m, T n) {
 
     auto a = T(1);
-    auto a_inner = T();
+    auto a_in = T();
     auto b = T();
-    auto b_inner = T(1);
+    auto b_in = T(1);
 
     while (n) {
         const auto q = m / n;
-        a_inner = std::exchange(a, a_inner) - q * a_inner;
-        b_inner = std::exchange(b, b_inner) - q * b_inner;
+        a_in = std::exchange(a, a_in) - q * a_in;
+        b_in = std::exchange(b, b_in) - q * b_in;
         n = std::exchange(m, n) - q * n;
     }
 
@@ -36,18 +36,18 @@ public:
 
         const auto [other_a, other_m] = other;
 
-        const auto [divisor, coef_m, coef_n] = extendedGCD(m, other_m);
+        const auto [div, coef_m, coef_n] = extendedGCD(m, other_m);
 
-        if ((a - other_a) % divisor) {
+        if ((a - other_a) % div) {
             a = 0;
             m = 0;
             return;
         }
 
-        const auto multiple = m / divisor * other_m;
+        const auto mult = m / div * other_m;
 
-        a = (a + coef_m * (other_a - a) / divisor % (other_m / divisor) * m) % multiple;
-        m = multiple;
+        a = (a + coef_m * (other_a - a) / div % (other_m / div) * m) % mult;
+        m = mult;
 
         if (a < 0) {
             a += m;

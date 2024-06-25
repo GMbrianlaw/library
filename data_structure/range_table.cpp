@@ -28,7 +28,7 @@ namespace RangeTable {
     }
 
     template <typename F>
-    auto forRange(int idx_1, int idx_2, F f) {
+    auto forRng(int idx_1, int idx_2, F f) {
 
         --idx_2;
 
@@ -37,10 +37,10 @@ namespace RangeTable {
             return;
         }
 
-        const auto level = log2(idx_1 ^ idx_2) + 1;
+        const auto lvl = log2(idx_1 ^ idx_2) + 1;
 
-        f(level, idx_1);
-        f(level, idx_2);
+        f(lvl, idx_1);
+        f(lvl, idx_2);
 
     }
 

@@ -9,15 +9,15 @@ private:
 
 public:
 
-    static auto getId(int size) {
+    static auto getId(int sz) {
 
-        auto matrix = Matrix(size, size);
+        auto res = Matrix(sz, sz);
 
-        for (auto i = 0; i < size; ++i) {
-            matrix[i][i] = T(1);
+        for (auto i = 0; i < sz; ++i) {
+            res[i][i] = T(1);
         }
 
-        return matrix;
+        return res;
 
     }
 
@@ -64,35 +64,35 @@ public:
 
     auto operator*=(const Matrix& other) {
 
-        auto result = Matrix(m, other.n);
+        auto res = Matrix(m, other.n);
 
         for (auto i = 0; i < m; ++i) {
             for (auto j = 0; j < other.n; ++j) {
                 for (auto k = 0; k < n; ++k) {
-                    result[i][j] += data[i][k] * other[k][j];
+                    res[i][j] += data[i][k] * other[k][j];
                 }
             }
         }
 
-        *this = result;
+        *this = res;
 
     }
 
-    auto operator*=(T coefficient) {
+    auto operator*=(T coef) {
 
         for (auto& x : data) {
             for (auto& y : x) {
-                y *= coefficient;
+                y *= coef;
             }
         }
 
     }
 
-    auto operator/=(T divisor) {
+    auto operator/=(T div) {
 
         for (auto& x : data) {
             for (auto& y : x) {
-                y /= divisor;
+                y /= div;
             }
         }
 
